@@ -1,9 +1,8 @@
 package com.serg.model.flower;
 
-import com.serg.dao.BouquetDao;
-import com.serg.dao.BouquetDaoImpl;
+import java.util.Comparator;
 
-public class Flower implements Comparable<Flower> {
+public class Flower implements Comparable<Flower>, Comparator<Flower> {
     long id;
     String name;
     int length;
@@ -21,7 +20,9 @@ public class Flower implements Comparable<Flower> {
         this.petals = petals;
         this.spike = spike;
         this.color = color;
-        createFlower();
+    }
+
+    public Flower() {
     }
 
     public int getLength() {
@@ -60,9 +61,12 @@ public class Flower implements Comparable<Flower> {
         return o.getFresh().ordinal() - this.getFresh().ordinal();
     }
 
-    private Flower createFlower() {
-        BouquetDao bouquetDao = new BouquetDaoImpl();
-        this.id = bouquetDao.addFlower(this);
-        return this;
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Override
+    public int compare(Flower o1, Flower o2) {
+        return o1.getFresh().ordinal() - o2.getFresh().ordinal();
     }
 }

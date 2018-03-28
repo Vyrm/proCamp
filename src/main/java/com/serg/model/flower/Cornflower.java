@@ -1,8 +1,8 @@
 package com.serg.model.flower;
 
-public class Cornflower extends Flower{
+public class Cornflower extends Flower {
     public Cornflower(String name, int length, Enum fresh, double price, int petals, boolean spike, Enum color) {
-        super(name,length, fresh, price,petals, spike, color);
+        super(name, length, fresh, price, petals, spike, color);
     }
 
     public int getLength() {

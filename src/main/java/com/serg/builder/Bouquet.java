@@ -1,27 +1,34 @@
 package com.serg.builder;
 
-import com.serg.dao.BouquetDao;
-import com.serg.dao.BouquetDaoImpl;
-import com.serg.model.accessory.Paper;
-import com.serg.model.accessory.Ribbon;
 import com.serg.model.flower.Flower;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Bouquet {
+    private static final Logger logger = LoggerFactory.getLogger("Bouquet");
     private List<Flower> bouquet;
-    private Paper paper;
-    private Ribbon ribbon;
     private String name;
+    private boolean isEmpty = false;
+
+    private Bouquet(BouquetBuilder bouquetBuilder) {
+        this.bouquet = bouquetBuilder.bouquet;
+        this.name = bouquetBuilder.name;
+        this.isEmpty = bouquetBuilder.isEmpty;
+    }
+
+    public boolean isEmpty() {
+        return isEmpty;
+    }
 
     public double getPrice() {
         double price = 0;
         for (Flower flower : bouquet) {
             price += flower.getPrice();
         }
-        if (paper != null) price += paper.getPrice();
-        if (ribbon != null) price += ribbon.getPrice();
         return price;
     }
 
@@ -29,21 +36,13 @@ public class Bouquet {
         return name;
     }
 
-    private Bouquet(BouquetBuilder bouquetBuilder) {
-        this.bouquet = bouquetBuilder.bouquet;
-        this.paper = bouquetBuilder.paper;
-        this.ribbon = bouquetBuilder.ribbon;
-        this.name = bouquetBuilder.name;
-    }
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("Bouquet{" + "bouquet=").append(bouquet);
-        if (paper != null) stringBuilder.append(", Paper price: ").append(paper.getPrice());
-        if (paper != null) stringBuilder.append(", Ribbon price: ").append(ribbon.getPrice());
-        stringBuilder.append('}');
-        return stringBuilder.toString();
+        return "Bouquet{" +
+                "bouquet=" + bouquet +
+                ", name='" + name + '\'' +
+                '}';
     }
 
     public List<Flower> getBouquet() {
@@ -58,30 +57,24 @@ public class Bouquet {
         return list;
     }
 
+    public void sortByFresh() {
+        List<Flower> list = this.bouquet;
+        Collections.sort(list, new Flower());
+    }
+
     public static class BouquetBuilder {
-        private List<Flower> bouquet = new ArrayList<Flower>();
-        private Paper paper;
-        private Ribbon ribbon;
+        private List<Flower> bouquet;
         private String name;
+        private boolean isEmpty = false;
 
         public BouquetBuilder() {
-
+            bouquet = new ArrayList<Flower>();
         }
 
         public BouquetBuilder addFlower(Flower flower) {
-            bouquet.add(flower);
-            return this;
-        }
-
-        public BouquetBuilder setPaper(int price) {
-            paper = new Paper();
-            paper.setPrice(price);
-            return this;
-        }
-
-        public BouquetBuilder setRibbon(int price) {
-            ribbon = new Ribbon();
-            ribbon.setPrice(price);
+            if (!(flower.getId() == 0)) {
+                bouquet.add(flower);
+            }
             return this;
         }
 
@@ -90,9 +83,10 @@ public class Bouquet {
             return this;
         }
 
-        public Bouquet build() {
-            BouquetDao bouquetDao = new BouquetDaoImpl();
-            bouquetDao.addBouquet(new Bouquet(this));
+        public Bouquet build(){
+            if (!(this.bouquet.size() == 0)) {
+                return new Bouquet(this);
+            } else isEmpty = true;
             return new Bouquet(this);
         }
     }

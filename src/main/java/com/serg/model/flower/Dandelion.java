@@ -1,8 +1,8 @@
 package com.serg.model.flower;
 
-public class Dandelion extends Flower{
+public class Dandelion extends Flower {
     public Dandelion(String name, int length, Enum fresh, double price, int petals, boolean spike, Enum color) {
-        super(name,length, fresh, price,petals, spike, color);
+        super(name, length, fresh, price, petals, spike, color);
     }
 
     public int getLength() {
