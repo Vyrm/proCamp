@@ -1,7 +1,7 @@
-package com.serg.model.flower;
+package com.garden.model.flower;
 
-public class Dandelion extends Flower {
-    public Dandelion(String name, int length, Enum fresh, double price, int petals, boolean spike, Enum color) {
+public class Rose extends Flower {
+    public Rose(String name, int length, Enum fresh, double price, int petals, boolean spike, Enum color) {
         super(name, length, fresh, price, petals, spike, color);
     }
 
@@ -19,8 +19,9 @@ public class Dandelion extends Flower {
 
     @Override
     public String toString() {
-        return "Dandelion{" +
-                "name='" + name + '\'' +
+        return "Rose{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", length=" + length +
                 ", fresh=" + fresh +
                 ", price=" + price +

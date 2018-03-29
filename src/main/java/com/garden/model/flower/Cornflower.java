@@ -1,4 +1,4 @@
-package com.serg.model.flower;
+package com.garden.model.flower;
 
 public class Cornflower extends Flower {
     public Cornflower(String name, int length, Enum fresh, double price, int petals, boolean spike, Enum color) {
@@ -21,7 +21,8 @@ public class Cornflower extends Flower {
     @Override
     public String toString() {
         return "Cornflower{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", length=" + length +
                 ", fresh=" + fresh +
                 ", price=" + price +

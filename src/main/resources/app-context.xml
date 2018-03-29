@@ -14,7 +14,16 @@
         <property name="password" value="${db.password}"/>
     </bean>
 
-    <bean id="dao" class="com.serg.dao.BouquetDaoImpl" init-method="init">
+    <bean id="flowerDao" class="com.garden.dao.impl.FlowerDaoImpl" init-method="init">
         <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <bean id="bouquetDao" class="com.garden.dao.impl.BouquetDaoImpl" init-method="init">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="flowerDao" ref="flowerDao"/>
+    </bean>
+
+    <bean id="bouquetService" class="com.garden.service.BouquetService">
+        <property name="bouquetDao" ref="bouquetDao"/>
     </bean>
 </beans>
