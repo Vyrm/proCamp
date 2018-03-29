@@ -1,6 +1,5 @@
 package com.garden.dao;
 
-import com.garden.dao.impl.BouquetDaoImpl;
 import com.garden.dao.impl.FlowerDaoImpl;
 import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Flower;
@@ -27,7 +26,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BouquetDaoImplTest {
+public class FlowerDaoImplTest {
     @Mock
     private Connection connection;
     @Mock
@@ -38,20 +37,17 @@ public class BouquetDaoImplTest {
     private DataSource dataSource;
     @Mock
     private Properties properties;
-    @Mock
-    private FlowerDaoImpl flowerDao;
     @InjectMocks
-    private BouquetDaoImpl bouquetDao;
+    private FlowerDaoImpl flowerDao;
     private Flower rose;
     private Bouquet bouquet;
 
     @Before
     public void init() throws SQLException {
         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);
-        rose.setId(1);
+        rose.setId(1L);
         bouquet = new Bouquet("Test bouquet");
         bouquet.addFlower(rose);
-
         when(dataSource.getConnection()).thenReturn(connection);
         when(properties.getProperty(any(String.class))).thenReturn("Test SQL String");
         when(connection.prepareStatement(any(String.class), eq(1))).thenReturn(preparedStatement);
@@ -59,18 +55,10 @@ public class BouquetDaoImplTest {
         when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
         when(resultSet.next()).thenReturn(true);
         when(resultSet.getLong(1)).thenReturn(1L);
-        when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
-        when(preparedStatement.executeQuery()).thenReturn(resultSet);
     }
 
     @Test
-    public void addBouquetTest() {
-        Assert.assertEquals(1, bouquetDao.addBouquet(bouquet));
-    }
-
-    @Test
-    public void getBouquetByIdTest() throws SQLException {
-        when(resultSet.next()).thenReturn(false);
-        Assert.assertEquals(null, bouquetDao.getBouquetById(95L));
+    public void addFlowerTest() {
+        Assert.assertEquals(1L, flowerDao.addFlower(rose));
     }
 }
