@@ -5,6 +5,7 @@ import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Flower;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BouquetService {
@@ -17,6 +18,11 @@ public class BouquetService {
             if (flower.getLength() >= low && flower.getLength() <= high) list.add(flower);
         }
         return list;
+    }
+
+    public Bouquet sortBouquete(Bouquet bouquet){
+        Collections.sort(bouquet.getBouquet());
+        return bouquet;
     }
 
     public void setBouquetDao(BouquetDaoImpl bouquetDao) {

@@ -40,7 +40,7 @@ public class Main {
         System.err.println(bouquet);
         Bouquet bouquet1 = bouquetDao.getBouquetById(126L);
         System.err.println(bouquet1);
-        Collections.sort(bouquet1.getBouquet());
+        bouquetService.sortBouquete(bouquet1);
         System.out.println("Sorted" + bouquet1);
     }
 }
