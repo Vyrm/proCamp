@@ -20,7 +20,7 @@ public class BouquetService {
         return list;
     }
 
-    public Bouquet sortBouquete(Bouquet bouquet){
+    public Bouquet sortBouquet(Bouquet bouquet){
         Collections.sort(bouquet.getBouquet());
         return bouquet;
     }

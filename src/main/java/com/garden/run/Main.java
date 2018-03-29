@@ -13,8 +13,6 @@ import com.garden.service.BouquetService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import java.util.Collections;
-
 public class Main {
     public static void main(String[] args) {
         ApplicationContext context = new ClassPathXmlApplicationContext("app-context.xml");
@@ -40,7 +38,7 @@ public class Main {
         System.err.println(bouquet);
         Bouquet bouquet1 = bouquetDao.getBouquetById(126L);
         System.err.println(bouquet1);
-        bouquetService.sortBouquete(bouquet1);
+        bouquetService.sortBouquet(bouquet1);
         System.out.println("Sorted" + bouquet1);
     }
 }
