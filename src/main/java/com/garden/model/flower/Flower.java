@@ -1,6 +1,5 @@
 package com.garden.model.flower;
 
-import com.garden.model.bouquet.Bouquet;
 import com.garden.model.settings.Color;
 import com.garden.model.settings.Fresh;
 
@@ -35,28 +34,56 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
         return length;
     }
 
+    public void setLength(int length) {
+        this.length = length;
+    }
+
     public double getPrice() {
         return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Enum getFresh() {
         return fresh;
     }
 
+    public void setFresh(String fresh) {
+        this.fresh = Fresh.valueOf(fresh);
+    }
+
     public Enum getColor() {
         return color;
+    }
+
+    public void setColor(String color) {
+        this.color = Color.valueOf(color);
     }
 
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getPetals() {
         return petals;
     }
 
+    public void setPetals(int petals) {
+        this.petals = petals;
+    }
+
     public boolean isSpike() {
         return spike;
+    }
+
+    public void setSpike(boolean spike) {
+        this.spike = spike;
     }
 
     public long getId() {
@@ -76,34 +103,6 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
         return o1.getFresh().ordinal() - o2.getFresh().ordinal();
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public void setFresh(String fresh) {
-        this.fresh = Fresh.valueOf(fresh);
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
-    }
-
-    public void setPetals(int petals) {
-        this.petals = petals;
-    }
-
-    public void setSpike(boolean spike) {
-        this.spike = spike;
-    }
-
-    public void setColor(String color) {
-        this.color = Color.valueOf(color);
-    }
-
     @Override
     public String toString() {
         return "Flower{" +
@@ -117,6 +116,7 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
                 ", color=" + color +
                 '}';
     }
+
     public Flower mapRow(ResultSet resultSet) throws SQLException {
         this.setId(resultSet.getLong("id"));
         this.setName(resultSet.getString("name"));

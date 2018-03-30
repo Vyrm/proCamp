@@ -1,5 +1,6 @@
 package com.garden.dao;
 
+import com.garden.config.AppConfig;
 import com.garden.dao.impl.BouquetDaoImpl;
 import com.garden.dao.impl.FlowerDaoImpl;
 import com.garden.model.bouquet.Bouquet;
@@ -14,6 +15,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -23,11 +27,11 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(classes = AppConfig.class)
 public class BouquetDaoImplTest {
     @Mock
     private Connection connection;
@@ -41,10 +45,12 @@ public class BouquetDaoImplTest {
     private Properties properties;
     @Mock
     private FlowerDaoImpl flowerDao;
+    @Autowired
     @InjectMocks
     private BouquetDaoImpl bouquetDao;
     private Flower rose;
     private Bouquet bouquet;
+
 
     @Before
     public void init() throws SQLException {
@@ -56,8 +62,14 @@ public class BouquetDaoImplTest {
         bouquet = new Bouquet("Test bouquet");
         bouquet.addFlower(rose);
 
-        when(dataSource.getConnection()).thenReturn(connection);
-        when(properties.getProperty(any(String.class))).thenReturn("Test SQL String");
+        when(
+                dataSource.getConnection())
+                .thenReturn(connection);
+
+        when(
+                properties.getProperty(any(String.class)))
+                .thenReturn("Test SQL String");
+
         when(connection.prepareStatement(any(String.class), eq(1))).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
         when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);

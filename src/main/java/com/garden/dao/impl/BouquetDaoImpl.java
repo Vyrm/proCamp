@@ -5,42 +5,32 @@ import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Flower;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
 
+@Component
 public class BouquetDaoImpl implements BouquetDao {
     private final Logger logger = LoggerFactory.getLogger("BouquetDao");
+    @Autowired
     private DataSource dataSource;
-    private Properties properties;
+    @Autowired
     private FlowerDaoImpl flowerDao;
-
-    public void init() {
-        properties = new Properties();
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("properties.properties").getFile());
-        InputStream inputStream;
-        try {
-            inputStream = new FileInputStream(file);
-            properties.load(inputStream);
-        } catch (IOException e) {
-            logger.error("Failed to load properties");
-        }
-    }
+    @Resource
+    private Environment environment;
 
     @Override
     public long addBouquet(Bouquet bouquet) {
         Long bouquetId = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement psInsertBouquet = connection.prepareStatement(
-                     properties.getProperty("INSERT_BOUQUET"), Statement.RETURN_GENERATED_KEYS)) {
+                     environment.getRequiredProperty("INSERT_BOUQUET"), Statement.RETURN_GENERATED_KEYS)) {
             psInsertBouquet.setString(1, bouquet.getName());
             psInsertBouquet.setDouble(2, bouquet.getPrice());
             int result = psInsertBouquet.executeUpdate();
@@ -52,7 +42,7 @@ public class BouquetDaoImpl implements BouquetDao {
                 }
             }
             try (PreparedStatement psInsertFlower = connection.prepareStatement(
-                    properties.getProperty("INSERT_FLOWER_TO_BOUQUET"))) {
+                    environment.getRequiredProperty("INSERT_FLOWER_TO_BOUQUET"))) {
 
                 for (Flower flower : bouquet.getBouquet()) {
                     long id = flowerDao.addFlower(flower);
@@ -76,7 +66,7 @@ public class BouquetDaoImpl implements BouquetDao {
         List<Flower> list = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement psSelectBouquet = connection.prepareStatement(
-                     properties.getProperty("SELECT_BOUQUET_BY_ID"))) {
+                     environment.getRequiredProperty("SELECT_BOUQUET_BY_ID"))) {
             psSelectBouquet.setLong(1, id);
             try (ResultSet resultSet = psSelectBouquet.executeQuery()) {
                 if (resultSet.next()) {
@@ -85,7 +75,7 @@ public class BouquetDaoImpl implements BouquetDao {
                 }
             }
             try (PreparedStatement psGetFlowers = connection.prepareStatement(
-                    properties.getProperty("SELECT_FLOWER_BY_BOUQUET_ID"))) {
+                    environment.getRequiredProperty("SELECT_FLOWER_BY_BOUQUET_ID"))) {
                 psGetFlowers.setLong(1, id);
                 try (ResultSet resultSet = psGetFlowers.executeQuery()) {
                     while (resultSet.next()) {
@@ -100,13 +90,5 @@ public class BouquetDaoImpl implements BouquetDao {
             logger.error("Failed to get bouquet");
         }
         return bouquet;
-    }
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    public void setFlowerDao(FlowerDaoImpl flowerDao) {
-        this.flowerDao = flowerDao;
     }
 }

@@ -1,7 +1,6 @@
 package com.garden.model.bouquet;
 
 import com.garden.model.flower.Flower;
-import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -41,16 +40,21 @@ public class Bouquet {
         return price;
     }
 
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public List<Flower> getBouquet() {
         return bouquet;
     }
-
-
 
     public void sortByFresh() {
         List<Flower> list = this.bouquet;
@@ -63,14 +67,6 @@ public class Bouquet {
                 "bouquet=" + bouquet +
                 ", name='" + name + '\'' +
                 '}';
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
     }
 
     public Bouquet mapRow(ResultSet resultSet) throws SQLException {

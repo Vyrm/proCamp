@@ -4,38 +4,28 @@ import com.garden.dao.FlowerDao;
 import com.garden.model.flower.Flower;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.*;
-import java.util.Properties;
 
+@Component
 public class FlowerDaoImpl implements FlowerDao {
     private final Logger logger = LoggerFactory.getLogger("FlowerDao");
+    @Autowired
     private DataSource dataSource;
-    private Properties properties;
+    @Resource
+    private Environment environment;
 
-    public void init() {
-        properties = new Properties();
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("properties.properties").getFile());
-        InputStream inputStream;
-        try {
-            inputStream = new FileInputStream(file);
-            properties.load(inputStream);
-        } catch (IOException e) {
-            logger.error("Failed to load properties");
-        }
-    }
 
     @Override
     public long addFlower(Flower flower) {
         Long flowerId = null;
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(properties.getProperty("INSERT_FLOWER"),
+             PreparedStatement preparedStatement = connection.prepareStatement(environment.getRequiredProperty("INSERT_FLOWER"),
                      Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, flower.getName());
             preparedStatement.setInt(2, flower.getLength());
@@ -59,9 +49,5 @@ public class FlowerDaoImpl implements FlowerDao {
         }
         flower.setId(flowerId);
         return flowerId;
-    }
-
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
     }
 }

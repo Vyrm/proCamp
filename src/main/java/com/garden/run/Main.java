@@ -1,8 +1,9 @@
 package com.garden.run;
 
-import com.garden.model.bouquet.Bouquet;
+import com.garden.config.AppConfig;
 import com.garden.dao.impl.BouquetDaoImpl;
 import com.garden.dao.impl.FlowerDaoImpl;
+import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Cornflower;
 import com.garden.model.flower.Dandelion;
 import com.garden.model.flower.Flower;
@@ -11,14 +12,15 @@ import com.garden.model.settings.Color;
 import com.garden.model.settings.Fresh;
 import com.garden.service.BouquetService;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
     public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("app-context.xml");
-        BouquetDaoImpl bouquetDao = (BouquetDaoImpl) context.getBean("bouquetDao");
-        FlowerDaoImpl flowerDao = (FlowerDaoImpl) context.getBean("flowerDao");
-        BouquetService bouquetService = (BouquetService) context.getBean("bouquetService");
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+
+        BouquetDaoImpl bouquetDao = context.getBean(BouquetDaoImpl.class);
+        FlowerDaoImpl flowerDao = context.getBean(FlowerDaoImpl.class);
+        BouquetService bouquetService = context.getBean(BouquetService.class);
 
 
         Flower rose = new Rose("Rose", 70, Fresh.LOW, 200.00, 20, true, Color.RED);
@@ -30,7 +32,6 @@ public class Main {
         bouquet.addFlower(cornflower);
         bouquet.addFlower(dandelion);
         bouquetDao.addBouquet(bouquet);
-
 
         System.err.println(bouquet.getPrice());
         System.err.println("Get by length:" + bouquetService.getByLength(95L, 70, 80));
