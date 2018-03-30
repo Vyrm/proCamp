@@ -76,7 +76,7 @@ public class Bouquet {
     public Bouquet mapRow(ResultSet resultSet) throws SQLException {
         this.setId(resultSet.getLong("id"));
         this.setName(resultSet.getString("name"));
-        this.setPrice(resultSet.getDouble("assembled_price"));
+        this.setPrice(resultSet.getDouble("assemble_price"));
         return this;
     }
 }

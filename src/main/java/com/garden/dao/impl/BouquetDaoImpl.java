@@ -35,7 +35,6 @@ public class BouquetDaoImpl implements BouquetDao {
         }
     }
 
-
     @Override
     public long addBouquet(Bouquet bouquet) {
         Long bouquetId = null;
@@ -82,9 +81,7 @@ public class BouquetDaoImpl implements BouquetDao {
             try (ResultSet resultSet = psSelectBouquet.executeQuery()) {
                 if (resultSet.next()) {
                     bouquet = new Bouquet();
-                    bouquet.setId(resultSet.getLong("id"));
-                    bouquet.setName(resultSet.getString("name"));
-                    bouquet.setPrice(resultSet.getDouble("assemble_price"));
+                    bouquet = bouquet.mapRow(resultSet);
                 }
             }
             try (PreparedStatement psGetFlowers = connection.prepareStatement(
@@ -93,25 +90,17 @@ public class BouquetDaoImpl implements BouquetDao {
                 try (ResultSet resultSet = psGetFlowers.executeQuery()) {
                     while (resultSet.next()) {
                         Flower flower = new Flower();
-                        flower.setId(resultSet.getLong("id"));
-                        flower.setName(resultSet.getString("name"));
-                        flower.setLength(resultSet.getInt("length"));
-                        flower.setFresh(resultSet.getString("freshness"));
-                        flower.setPrice(resultSet.getDouble("price"));
-                        flower.setPetals(resultSet.getInt("petals"));
-                        flower.setSpike(resultSet.getBoolean("spike"));
-                        flower.setColor(resultSet.getString("color"));
+                        flower.mapRow(resultSet);
                         bouquet.getBouquet().add(flower);
                     }
                 }
             }
 
         } catch (SQLException e) {
-            logger.error("Failed to insert bouquet");
+            logger.error("Failed to get bouquet");
         }
         return bouquet;
     }
-
 
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
