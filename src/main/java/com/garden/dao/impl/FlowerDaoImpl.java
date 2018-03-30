@@ -20,13 +20,13 @@ public class FlowerDaoImpl implements FlowerDao {
     @Resource
     private Environment environment;
 
-
     @Override
-    public long addFlower(Flower flower) {
+    public long addFlower(Flower flower) throws SQLException {
         Long flowerId = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(environment.getRequiredProperty("INSERT_FLOWER"),
                      Statement.RETURN_GENERATED_KEYS)) {
+            logger.debug("Connection and preparedStatement created");
             preparedStatement.setString(1, flower.getName());
             preparedStatement.setInt(2, flower.getLength());
             preparedStatement.setString(3, flower.getFresh().toString());
@@ -36,6 +36,7 @@ public class FlowerDaoImpl implements FlowerDao {
             preparedStatement.setString(7, flower.getColor().toString());
             preparedStatement.setString(8, null);
             int result = preparedStatement.executeUpdate();
+            logger.debug("Executed flower");
             if (result == 1) {
                 try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
@@ -43,11 +44,9 @@ public class FlowerDaoImpl implements FlowerDao {
                     }
                 }
             }
-
-        } catch (SQLException e) {
-            logger.error("Failed to insert flower");
         }
         flower.setId(flowerId);
+        logger.debug("Set Id");
         return flowerId;
     }
 }

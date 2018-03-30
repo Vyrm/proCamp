@@ -1,6 +1,6 @@
 package com.garden.service;
 
-import com.garden.dao.impl.BouquetDaoImpl;
+import com.garden.config.AppConfig;
 import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Cornflower;
 import com.garden.model.flower.Dandelion;
@@ -14,10 +14,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 
 @RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(classes = AppConfig.class, loader=AnnotationConfigContextLoader.class)
 public class BouquetServiceTest {
     private BouquetService bouquetService;
     private Bouquet bouquet;
@@ -30,7 +33,7 @@ public class BouquetServiceTest {
         //
         // Given
         //
-        ApplicationContext context = new ClassPathXmlApplicationContext("app-context.xml");
+        ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         bouquetService = (BouquetService) context.getBean("bouquetService");
 
         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);

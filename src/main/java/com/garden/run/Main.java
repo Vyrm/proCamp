@@ -14,8 +14,10 @@ import com.garden.service.BouquetService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
+import java.sql.SQLException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         BouquetDaoImpl bouquetDao = context.getBean(BouquetDaoImpl.class);
@@ -34,12 +36,13 @@ public class Main {
         bouquetDao.addBouquet(bouquet);
 
         System.err.println(bouquet.getPrice());
+        System.out.println(bouquet);
         System.err.println("Get by length:" + bouquetService.getByLength(95L, 70, 80));
-        bouquet.sortByFresh();
+/*        bouquet.sortByFresh();
         System.err.println(bouquet);
         Bouquet bouquet1 = bouquetDao.getBouquetById(126L);
-        System.err.println(bouquet1);
-        bouquetService.sortBouquet(bouquet1);
-        System.out.println("Sorted " + bouquet1);
+        System.err.println(bouquet1);*/
+        //bouquetService.sortBouquet(bouquet1);
+        //System.out.println("Sorted " + bouquet1);
     }
 }

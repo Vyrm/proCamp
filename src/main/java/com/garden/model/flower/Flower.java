@@ -117,15 +117,5 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
                 '}';
     }
 
-    public Flower mapRow(ResultSet resultSet) throws SQLException {
-        this.setId(resultSet.getLong("id"));
-        this.setName(resultSet.getString("name"));
-        this.setLength(resultSet.getInt("length"));
-        this.setFresh(resultSet.getString("freshness"));
-        this.setPrice(resultSet.getDouble("price"));
-        this.setPetals(resultSet.getInt("petals"));
-        this.setSpike(resultSet.getBoolean("spike"));
-        this.setColor(resultSet.getString("color"));
-        return this;
-    }
+
 }

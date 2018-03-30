@@ -1,5 +1,6 @@
 package com.garden.dao;
 
+import com.garden.config.AppConfig;
 import com.garden.dao.impl.FlowerDaoImpl;
 import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Flower;
@@ -13,6 +14,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.core.env.Environment;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -26,6 +30,7 @@ import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
+@ContextConfiguration(classes = AppConfig.class, loader=AnnotationConfigContextLoader.class)
 public class FlowerDaoImplTest {
     @Mock
     private Connection connection;
@@ -36,7 +41,7 @@ public class FlowerDaoImplTest {
     @Mock
     private DataSource dataSource;
     @Mock
-    private Properties properties;
+    private Environment environment;
     @InjectMocks
     private FlowerDaoImpl flowerDao;
     private Flower rose;
@@ -52,7 +57,7 @@ public class FlowerDaoImplTest {
         bouquet = new Bouquet("Test bouquet");
         bouquet.addFlower(rose);
         when(dataSource.getConnection()).thenReturn(connection);
-        when(properties.getProperty(any(String.class))).thenReturn("Test SQL String");
+        when(environment.getRequiredProperty(any(String.class))).thenReturn("Test SQL String");
         when(connection.prepareStatement(any(String.class), eq(1))).thenReturn(preparedStatement);
         when(preparedStatement.executeUpdate()).thenReturn(1);
         when(preparedStatement.getGeneratedKeys()).thenReturn(resultSet);
@@ -61,15 +66,15 @@ public class FlowerDaoImplTest {
     }
 
     @Test
-    public void addFlowerTest() {
+    public void addFlowerTest() throws SQLException {
         //
         // When
         //
-        long id = flowerDao.addFlower(rose);
+        Long id = flowerDao.addFlower(rose);
 
         //
         // Then
         //
-        Assert.assertEquals(1L, id);
+        Assert.assertEquals(java.util.Optional.of(1L).get(), java.util.Optional.ofNullable(id).get());
     }
 }
