@@ -1,7 +1,10 @@
 package com.garden.model.bouquet;
 
 import com.garden.model.flower.Flower;
+import org.springframework.jdbc.core.RowMapper;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,5 +71,12 @@ public class Bouquet {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Bouquet mapRow(ResultSet resultSet) throws SQLException {
+        this.setId(resultSet.getLong("id"));
+        this.setName(resultSet.getString("name"));
+        this.setPrice(resultSet.getDouble("assembled_price"));
+        return this;
     }
 }

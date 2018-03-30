@@ -44,6 +44,9 @@ public class FlowerDaoImplTest {
 
     @Before
     public void init() throws SQLException {
+        //
+        // Given
+        //
         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);
         rose.setId(1L);
         bouquet = new Bouquet("Test bouquet");
@@ -59,6 +62,14 @@ public class FlowerDaoImplTest {
 
     @Test
     public void addFlowerTest() {
-        Assert.assertEquals(1L, flowerDao.addFlower(rose));
+        //
+        // When
+        //
+        long id = flowerDao.addFlower(rose);
+
+        //
+        // Then
+        //
+        Assert.assertEquals(1L, id);
     }
 }

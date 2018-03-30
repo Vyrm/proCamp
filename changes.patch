@@ -1,0 +1,379 @@
+Index: pom.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- pom.xml	(date 1522335030000)
++++ pom.xml	(date 1522405525000)
+@@ -13,8 +13,8 @@
+                 <groupId>org.apache.maven.plugins</groupId>
+                 <artifactId>maven-compiler-plugin</artifactId>
+                 <configuration>
+-                    <source>1.7</source>
+-                    <target>1.7</target>
++                    <source>1.8</source>
++                    <target>1.8</target>
+                 </configuration>
+             </plugin>
+         </plugins>
+Index: src/main/java/com/garden/config/AppConfig.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/garden/config/AppConfig.java	(date 1522405525000)
++++ src/main/java/com/garden/config/AppConfig.java	(date 1522405525000)
+@@ -0,0 +1,18 @@
++package com.garden.config;
++
++import org.springframework.context.annotation.Bean;
++import org.springframework.context.annotation.ComponentScan;
++import org.springframework.context.annotation.Configuration;
++import org.springframework.context.annotation.PropertySource;
++import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
++
++@Configuration
++@PropertySource("classpath:properties.properties")
++@ComponentScan(basePackages = "com.garden")
++public class AppConfig {
++
++    @Bean
++    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
++        return new PropertySourcesPlaceholderConfigurer();
++    }
++}
+Index: src/main/java/com/garden/dao/impl/BouquetDaoImpl.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/garden/dao/impl/BouquetDaoImpl.java	(date 1522335030000)
++++ src/main/java/com/garden/dao/impl/BouquetDaoImpl.java	(date 1522405525000)
+@@ -12,6 +12,8 @@
+ import java.io.IOException;
+ import java.io.InputStream;
+ import java.sql.*;
++import java.util.ArrayList;
++import java.util.List;
+ import java.util.Properties;
+ 
+ public class BouquetDaoImpl implements BouquetDao {
+@@ -72,6 +74,7 @@
+     @Override
+     public Bouquet getBouquetById(long id) {
+         Bouquet bouquet = null;
++        List<Flower> list = new ArrayList<>();
+         try (Connection connection = dataSource.getConnection();
+              PreparedStatement psSelectBouquet = connection.prepareStatement(
+                      properties.getProperty("SELECT_BOUQUET_BY_ID"))) {
+@@ -104,7 +107,7 @@
+             }
+ 
+         } catch (SQLException e) {
+-            logger.error("Failed to get bouquet");
++            logger.error("Failed to insert bouquet");
+         }
+         return bouquet;
+     }
+Index: src/main/java/com/garden/model/bouquet/Bouquet.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/garden/model/bouquet/Bouquet.java	(date 1522335030000)
++++ src/main/java/com/garden/model/bouquet/Bouquet.java	(date 1522405525000)
+@@ -1,12 +1,15 @@
+ package com.garden.model.bouquet;
+ 
+ import com.garden.model.flower.Flower;
++import org.springframework.jdbc.core.RowMapper;
+ 
++import java.sql.ResultSet;
++import java.sql.SQLException;
+ import java.util.ArrayList;
+ import java.util.Collections;
+ import java.util.List;
+ 
+-public class Bouquet {
++public class Bouquet implements RowMapper<Bouquet> {
+     private Long id;
+     private List<Flower> bouquet;
+     private String name;
+@@ -69,4 +72,12 @@
+     public void setPrice(double price) {
+         this.price = price;
+     }
++
++    @Override
++    public Bouquet mapRow(ResultSet resultSet, int i) throws SQLException {
++        this.setId(resultSet.getLong("id"));
++        this.setName(resultSet.getString("name"));
++        this.setPrice(resultSet.getDouble("assembled_price"));
++        return this;
++    }
+ }
+Index: src/main/java/com/garden/run/Main.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/garden/run/Main.java	(date 1522335030000)
++++ src/main/java/com/garden/run/Main.java	(date 1522405525000)
+@@ -33,12 +33,12 @@
+ 
+ 
+         System.err.println(bouquet.getPrice());
+-        System.err.println(bouquetService.getByLength(95L, 70, 80));
++        System.err.println("Get by length:" + bouquetService.getByLength(95L, 70, 80));
+         bouquet.sortByFresh();
+         System.err.println(bouquet);
+         Bouquet bouquet1 = bouquetDao.getBouquetById(126L);
+         System.err.println(bouquet1);
+         bouquetService.sortBouquet(bouquet1);
+-        System.out.println("Sorted" + bouquet1);
++        System.out.println("Sorted " + bouquet1);
+     }
+ }
+Index: src/main/java/com/garden/service/BouquetService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/main/java/com/garden/service/BouquetService.java	(date 1522335030000)
++++ src/main/java/com/garden/service/BouquetService.java	(date 1522405525000)
+@@ -6,22 +6,21 @@
+ 
+ import java.util.ArrayList;
+ import java.util.Collections;
++import java.util.Comparator;
+ import java.util.List;
++import java.util.stream.Collectors;
+ 
+ public class BouquetService {
+     private BouquetDaoImpl bouquetDao;
+ 
+     public List<Flower> getByLength(Long bouquetId, int low, int high) {
+         Bouquet bouquet = bouquetDao.getBouquetById(bouquetId);
+-        List<Flower> list = new ArrayList<>();
+-        for (Flower flower : bouquet.getBouquet()) {
+-            if (flower.getLength() >= low && flower.getLength() <= high) list.add(flower);
+-        }
+-        return list;
++        return bouquet.getBouquet().stream().filter(p -> p.getLength() >= low && p.getLength() <= high)
++                .collect(Collectors.toList());
+     }
+ 
+     public Bouquet sortBouquet(Bouquet bouquet){
+-        Collections.sort(bouquet.getBouquet());
++        bouquet.getBouquet().sort(Comparator.comparing(Flower::getFresh).reversed());
+         return bouquet;
+     }
+ 
+Index: src/test/java/com/garden/dao/BouquetDaoImplTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/com/garden/dao/BouquetDaoImplTest.java	(date 1522335030000)
++++ src/test/java/com/garden/dao/BouquetDaoImplTest.java	(date 1522405525000)
+@@ -23,6 +23,7 @@
+ import java.util.Properties;
+ 
+ import static org.mockito.Matchers.any;
++import static org.mockito.Matchers.anyObject;
+ import static org.mockito.Matchers.eq;
+ import static org.mockito.Mockito.when;
+ 
+@@ -47,6 +48,9 @@
+ 
+     @Before
+     public void init() throws SQLException {
++        //
++        // Given
++        //
+         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);
+         rose.setId(1);
+         bouquet = new Bouquet("Test bouquet");
+@@ -61,16 +65,62 @@
+         when(resultSet.getLong(1)).thenReturn(1L);
+         when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
+         when(preparedStatement.executeQuery()).thenReturn(resultSet);
++        when(flowerDao.addFlower(rose)).thenReturn(1L);
++
+     }
+ 
+     @Test
+     public void addBouquetTest() {
+-        Assert.assertEquals(1, bouquetDao.addBouquet(bouquet));
++        //
++        // When
++        //
++        long id = bouquetDao.addBouquet(bouquet);
++
++        //
++        // Then
++        //
++        Assert.assertEquals(1, id);
+     }
+ 
+     @Test
+     public void getBouquetByIdTest() throws SQLException {
++        //
++        // Given
++        //
+         when(resultSet.next()).thenReturn(false);
+-        Assert.assertEquals(null, bouquetDao.getBouquetById(95L));
++
++        //
++        // When
++        //
++        Bouquet bouquet = bouquetDao.getBouquetById(95L);
++
++        //
++        // Then
++        //
++        Assert.assertEquals(null, bouquet);
++    }
++
++    @Test(expected = Exception.class)
++    public void addBouquetExceptionTest() throws SQLException {
++        //
++        // Given
++        //
++        when(dataSource.getConnection()).thenReturn(null);
++        //
++        // When
++        //
++        bouquetDao.addBouquet(bouquet);
++    }
++
++    @Test(expected = Exception.class)
++    public void getBouquetByIdExceptionTest() throws SQLException {
++        //
++        // Given
++        //
++        when(dataSource.getConnection()).thenReturn(null);
++        //
++        // When
++        //
++        bouquetDao.addBouquet(bouquet);
+     }
+ }
+Index: src/test/java/com/garden/dao/FlowerDaoImplTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/com/garden/dao/FlowerDaoImplTest.java	(date 1522335030000)
++++ src/test/java/com/garden/dao/FlowerDaoImplTest.java	(date 1522405525000)
+@@ -44,6 +44,9 @@
+ 
+     @Before
+     public void init() throws SQLException {
++        //
++        // Given
++        //
+         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);
+         rose.setId(1L);
+         bouquet = new Bouquet("Test bouquet");
+@@ -59,6 +62,14 @@
+ 
+     @Test
+     public void addFlowerTest() {
+-        Assert.assertEquals(1L, flowerDao.addFlower(rose));
++        //
++        // When
++        //
++        long id = flowerDao.addFlower(rose);
++
++        //
++        // Then
++        //
++        Assert.assertEquals(1L, id);
+     }
+ }
+Index: src/test/java/com/garden/service/BouquetServiceTest.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- src/test/java/com/garden/service/BouquetServiceTest.java	(date 1522335030000)
++++ src/test/java/com/garden/service/BouquetServiceTest.java	(date 1522405525000)
+@@ -12,20 +12,14 @@
+ import org.junit.Before;
+ import org.junit.Test;
+ import org.junit.runner.RunWith;
+-import org.mockito.Mock;
+ import org.mockito.runners.MockitoJUnitRunner;
+-import org.springframework.beans.factory.annotation.Autowired;
+ import org.springframework.context.ApplicationContext;
+ import org.springframework.context.support.ClassPathXmlApplicationContext;
+ 
+-import static org.mockito.Matchers.any;
+-import static org.mockito.Mockito.when;
+-
+ 
+ @RunWith(MockitoJUnitRunner.class)
+ public class BouquetServiceTest {
+     private BouquetService bouquetService;
+-    private BouquetDaoImpl bouquetDao;
+     private Bouquet bouquet;
+     private Flower rose;
+     private Flower cornflower;
+@@ -33,35 +27,50 @@
+ 
+     @Before
+     public void init() {
++        //
++        // Given
++        //
+         ApplicationContext context = new ClassPathXmlApplicationContext("app-context.xml");
+         bouquetService = (BouquetService) context.getBean("bouquetService");
+-        bouquetDao = (BouquetDaoImpl) context.getBean("bouquetDao");
+-
+ 
+         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);
+         cornflower = new Cornflower("cornflower", 70, Fresh.LOW, 200.00, 20, true, Color.RED);
+         dandelion = new Dandelion("dandelion", 80, Fresh.LOW, 100.00, 10, false, Color.BLUE);
++        bouquet = new Bouquet("Test Bouquet");
++
+         rose.setId(1L);
+         cornflower.setId(2);
+         dandelion.setId(3);
+ 
+-        bouquet = new Bouquet("Test Bouquet");
+         bouquet.setId(95L);
+         bouquet.addFlower(rose);
+         bouquet.addFlower(cornflower);
+         bouquet.addFlower(dandelion);
+-        //when(bouquetDao.getBouquetById(any(Long.class))).thenReturn(bouquet);
+     }
+ 
+     @Test
+     public void getByLengthTest() {
+-
++        //
++        // When
++        //
+         int size = bouquetService.getByLength(95L, 70, 80).size();
++
++        //
++        // Then
++        //
+         Assert.assertEquals(size , 2);
+     }
+ 
+     @Test
+     public void getPriceTest() {
+-        Assert.assertEquals(bouquet.getPrice(), 500.0, 0.0);
++        //
++        // When
++        //
++        double price = bouquet.getPrice();
++
++        //
++        // Then
++        //
++        Assert.assertEquals(price, 500.0, 0.0);
+     }
+ }

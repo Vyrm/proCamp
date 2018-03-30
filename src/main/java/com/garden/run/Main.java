@@ -33,12 +33,12 @@ public class Main {
 
 
         System.err.println(bouquet.getPrice());
-        System.err.println(bouquetService.getByLength(95L, 70, 80));
+        System.err.println("Get by length:" + bouquetService.getByLength(95L, 70, 80));
         bouquet.sortByFresh();
         System.err.println(bouquet);
         Bouquet bouquet1 = bouquetDao.getBouquetById(126L);
         System.err.println(bouquet1);
         bouquetService.sortBouquet(bouquet1);
-        System.out.println("Sorted" + bouquet1);
+        System.out.println("Sorted " + bouquet1);
     }
 }

@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class BouquetDaoImpl implements BouquetDao {
@@ -72,6 +74,7 @@ public class BouquetDaoImpl implements BouquetDao {
     @Override
     public Bouquet getBouquetById(long id) {
         Bouquet bouquet = null;
+        List<Flower> list = new ArrayList<>();
         try (Connection connection = dataSource.getConnection();
              PreparedStatement psSelectBouquet = connection.prepareStatement(
                      properties.getProperty("SELECT_BOUQUET_BY_ID"))) {
@@ -104,7 +107,7 @@ public class BouquetDaoImpl implements BouquetDao {
             }
 
         } catch (SQLException e) {
-            logger.error("Failed to get bouquet");
+            logger.error("Failed to insert bouquet");
         }
         return bouquet;
     }

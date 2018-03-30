@@ -6,22 +6,21 @@ import com.garden.model.flower.Flower;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BouquetService {
     private BouquetDaoImpl bouquetDao;
 
     public List<Flower> getByLength(Long bouquetId, int low, int high) {
         Bouquet bouquet = bouquetDao.getBouquetById(bouquetId);
-        List<Flower> list = new ArrayList<>();
-        for (Flower flower : bouquet.getBouquet()) {
-            if (flower.getLength() >= low && flower.getLength() <= high) list.add(flower);
-        }
-        return list;
+        return bouquet.getBouquet().stream().filter(p -> p.getLength() >= low && p.getLength() <= high)
+                .collect(Collectors.toList());
     }
 
     public Bouquet sortBouquet(Bouquet bouquet){
-        Collections.sort(bouquet.getBouquet());
+        bouquet.getBouquet().sort(Comparator.comparing(Flower::getFresh).reversed());
         return bouquet;
     }
 

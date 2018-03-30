@@ -23,6 +23,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyObject;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.when;
 
@@ -47,6 +48,9 @@ public class BouquetDaoImplTest {
 
     @Before
     public void init() throws SQLException {
+        //
+        // Given
+        //
         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);
         rose.setId(1);
         bouquet = new Bouquet("Test bouquet");
@@ -61,16 +65,62 @@ public class BouquetDaoImplTest {
         when(resultSet.getLong(1)).thenReturn(1L);
         when(connection.prepareStatement(any(String.class))).thenReturn(preparedStatement);
         when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(flowerDao.addFlower(rose)).thenReturn(1L);
+
     }
 
     @Test
     public void addBouquetTest() {
-        Assert.assertEquals(1, bouquetDao.addBouquet(bouquet));
+        //
+        // When
+        //
+        long id = bouquetDao.addBouquet(bouquet);
+
+        //
+        // Then
+        //
+        Assert.assertEquals(1, id);
     }
 
     @Test
     public void getBouquetByIdTest() throws SQLException {
+        //
+        // Given
+        //
         when(resultSet.next()).thenReturn(false);
-        Assert.assertEquals(null, bouquetDao.getBouquetById(95L));
+
+        //
+        // When
+        //
+        Bouquet bouquet = bouquetDao.getBouquetById(95L);
+
+        //
+        // Then
+        //
+        Assert.assertEquals(null, bouquet);
+    }
+
+    @Test(expected = Exception.class)
+    public void addBouquetExceptionTest() throws SQLException {
+        //
+        // Given
+        //
+        when(dataSource.getConnection()).thenReturn(null);
+        //
+        // When
+        //
+        bouquetDao.addBouquet(bouquet);
+    }
+
+    @Test(expected = Exception.class)
+    public void getBouquetByIdExceptionTest() throws SQLException {
+        //
+        // Given
+        //
+        when(dataSource.getConnection()).thenReturn(null);
+        //
+        // When
+        //
+        bouquetDao.addBouquet(bouquet);
     }
 }
