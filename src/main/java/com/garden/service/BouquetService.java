@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.stream.XMLStreamWriter;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
@@ -44,7 +43,7 @@ public class BouquetService {
         return bouquet;
     }
 
-    public boolean saveBouquetToFileFromDbById(Bouquet bouquet){
+    public boolean saveBouquetToFileFromDbById(Bouquet bouquet) {
         try {
             JAXBContext jc = JAXBContext.newInstance(Bouquet.class);
 

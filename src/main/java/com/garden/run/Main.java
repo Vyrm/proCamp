@@ -15,11 +15,8 @@ import org.codehaus.jettison.json.JSONException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.stream.XMLStreamException;
-import java.io.StringWriter;
 import java.sql.SQLException;
 
 public class Main {

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<customer>
-    <id>123</id>
-    <name>Jane</name>
-    <length>Doe</length>
-    <freshness>ff</freshness>
-    <phone-number type="work">555-1111</phone-number>
-    <phone-number type="cell">555-2222</phone-number>
-</customer>
