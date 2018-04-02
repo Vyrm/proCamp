@@ -15,6 +15,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -25,8 +26,8 @@ public class Main {
         BouquetService bouquetService = context.getBean(BouquetService.class);
 
 
-        Flower rose = new Rose("Rose", 70, Fresh.LOW, 200.00, 20, true, Color.RED);
-        Flower cornflower = new Cornflower("Cornflower", 80, Fresh.HIGH, 200.00, 20, true, Color.RED);
+        Flower rose = new Rose("Rose", 70, Fresh.HIGH, 200.00, 20, true, Color.RED);
+        Flower cornflower = new Cornflower("Cornflower", 80, Fresh.LOW, 200.00, 20, true, Color.RED);
         Flower dandelion = new Dandelion("Dandelion", 90, Fresh.HIGH, 100.00, 10, false, Color.BLUE);
 
         Bouquet bouquet = new Bouquet("Bouquet 1");
@@ -37,12 +38,14 @@ public class Main {
 
         System.err.println(bouquet.getPrice());
         System.out.println(bouquet);
-        System.err.println("Get by length:" + bouquetService.getByLength(95L, 70, 80));
-/*        bouquet.sortByFresh();
+        List list = bouquetService.getByLength(95L, 80, 90);
+        System.err.println("Get by length:" + list);
+
+        bouquet.sortByFresh();
         System.err.println(bouquet);
         Bouquet bouquet1 = bouquetDao.getBouquetById(126L);
-        System.err.println(bouquet1);*/
-        //bouquetService.sortBouquet(bouquet1);
-        //System.out.println("Sorted " + bouquet1);
+        System.err.println(bouquet1);
+        bouquetService.sortBouquet(bouquet1);
+        System.out.println("Sorted " + bouquet1);
     }
 }

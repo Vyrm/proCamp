@@ -22,6 +22,10 @@ public class BouquetDaoImpl implements BouquetDao {
     private DataSource dataSource;
     @Autowired
     private FlowerDaoImpl flowerDao;
+    @Autowired
+    private BouquetRower bouquetRower;
+    @Autowired
+    private FlowerRower flowerRower;
     @Resource
     private Environment environment;
 
@@ -46,7 +50,7 @@ public class BouquetDaoImpl implements BouquetDao {
             try (PreparedStatement psInsertFlower = connection.prepareStatement(
                     environment.getRequiredProperty("INSERT_FLOWER_TO_BOUQUET"))) {
 
-                for (Flower flower : bouquet.getBouquet()) {
+                for (Flower flower : bouquet.getFlowers()) {
                     long id = flowerDao.addFlower(flower);
                     psInsertFlower.setLong(1, bouquetId);
                     psInsertFlower.setLong(2, id);
@@ -61,7 +65,7 @@ public class BouquetDaoImpl implements BouquetDao {
 
     @Override
     public Bouquet getBouquetById(long id) throws SQLException {
-        Bouquet bouquet = new Bouquet();
+        Bouquet bouquet = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement psSelectBouquet = connection.prepareStatement(
                      environment.getRequiredProperty("SELECT_BOUQUET_BY_ID"))) {
@@ -69,8 +73,7 @@ public class BouquetDaoImpl implements BouquetDao {
             psSelectBouquet.setLong(1, id);
             try (ResultSet resultSet = psSelectBouquet.executeQuery()) {
                 if (resultSet.next()) {
-                    BouquetRower bouquetRower = new BouquetRower();
-                    bouquet = bouquetRower.mapRow(resultSet,bouquet);
+                    bouquet = bouquetRower.mapRow(resultSet);
                 }
                 logger.debug("Executed bouquet");
             }
@@ -79,9 +82,10 @@ public class BouquetDaoImpl implements BouquetDao {
                 psGetFlowers.setLong(1, id);
                 try (ResultSet resultSet = psGetFlowers.executeQuery()) {
                     while (resultSet.next()) {
-                        FlowerRower flowerRower = new FlowerRower();
                         Flower flower = flowerRower.mapRow(resultSet);
-                        bouquet.getBouquet().add(flower);
+                        logger.info(flower.toString());
+                        bouquet.getFlowers().add(flower);
+                        logger.info(bouquet.toString());
                     }
                     logger.debug("Executed flowers");
                 }

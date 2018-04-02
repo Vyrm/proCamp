@@ -1,26 +1,26 @@
 package com.garden.model.bouquet;
 
 import com.garden.model.flower.Flower;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Bouquet {
     private Long id;
-    private List<Flower> bouquet;
+    private List<Flower> flowers;
     private String name;
     private double price;
 
     public Bouquet(String name) {
         this.name = name;
-        bouquet = new ArrayList<>();
+        flowers = new ArrayList<>();
     }
 
     public Bouquet() {
-        bouquet = new ArrayList<>();
+        flowers = new ArrayList<>();
     }
 
     public void setId(Long id) {
@@ -28,13 +28,13 @@ public class Bouquet {
     }
 
     public void addFlower(Flower flower) {
-        bouquet.add(flower);
+        flowers.add(flower);
 
     }
 
     public double getPrice() {
         double price = 0;
-        for (Flower flower : bouquet) {
+        for (Flower flower : flowers) {
             price += flower.getPrice();
         }
         return price;
@@ -52,19 +52,19 @@ public class Bouquet {
         this.name = name;
     }
 
-    public List<Flower> getBouquet() {
-        return bouquet;
+    public List<Flower> getFlowers() {
+        return flowers;
     }
 
     public void sortByFresh() {
-        List<Flower> list = this.bouquet;
+        List<Flower> list = this.flowers;
         Collections.sort(list, new Flower());
     }
 
     @Override
     public String toString() {
         return "Bouquet{" +
-                "bouquet=" + bouquet +
+                "flowers=" + flowers +
                 ", name='" + name + '\'' +
                 '}';
     }

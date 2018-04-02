@@ -26,11 +26,11 @@ public class BouquetService {
         } catch (SQLException e) {
             logger.error("Failed to get bouquet by id");
         }
-        return bouquet.getBouquet().stream().filter(p -> p.getLength() >= low && p.getLength() <= high).collect(Collectors.toList());
+        return bouquet.getFlowers().stream().filter(p -> (p.getLength() >= low && p.getLength() <= high)).collect(Collectors.toList());
     }
 
     public Bouquet sortBouquet(Bouquet bouquet) {
-        bouquet.getBouquet().sort(Comparator.comparing(Flower::getFresh).reversed());
+        bouquet.getFlowers().sort(Comparator.comparing(Flower::getFresh).reversed());
         return bouquet;
     }
 }
