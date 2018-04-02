@@ -2,10 +2,15 @@ package com.garden.model.bouquet;
 
 import com.garden.model.flower.Flower;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Bouquet {
     private Long id;
     private List<Flower> flowers;

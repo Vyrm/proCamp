@@ -1,7 +1,10 @@
 package com.garden.model.flower;
 
+import com.garden.model.settings.Color;
+import com.garden.model.settings.Fresh;
+
 public class Cornflower extends Flower {
-    public Cornflower(String name, int length, Enum fresh, double price, int petals, boolean spike, Enum color) {
+    public Cornflower(String name, int length, Fresh fresh, double price, int petals, boolean spike, Color color) {
         super(name, length, fresh, price, petals, spike, color);
     }
 

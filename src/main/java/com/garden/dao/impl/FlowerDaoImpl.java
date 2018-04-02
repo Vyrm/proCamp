@@ -21,7 +21,7 @@ public class FlowerDaoImpl implements FlowerDao {
     private Environment environment;
 
     @Override
-    public long addFlower(Flower flower) throws SQLException {
+    public Long addFlower(Flower flower) throws SQLException {
         Long flowerId = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(environment.getRequiredProperty("INSERT_FLOWER"),

@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class BouquetRower {
+public class BouquetRowMapper {
     private Bouquet bouquet;
 
     public Bouquet mapRow(ResultSet resultSet) throws SQLException {

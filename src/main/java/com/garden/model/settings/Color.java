@@ -1,5 +1,15 @@
 package com.garden.model.settings;
 
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
+import javax.xml.bind.annotation.XmlType;
+
+@XmlEnum
 public enum Color {
-    RED, BLUE, YELLOW
+    @XmlEnumValue(value = "red")
+    RED,
+    @XmlEnumValue(value = "blue")
+    BLUE,
+    @XmlEnumValue(value = "yellow")
+    YELLOW
 }

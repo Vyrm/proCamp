@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Component
-public class FlowerRower {
+public class FlowerRowMapper {
     private Flower flower;
 
     public Flower mapRow(ResultSet resultSet) throws SQLException {

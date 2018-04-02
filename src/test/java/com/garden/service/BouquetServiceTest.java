@@ -42,8 +42,8 @@ public class BouquetServiceTest {
         bouquet = new Bouquet("Test Bouquet");
 
         rose.setId(1L);
-        cornflower.setId(2);
-        dandelion.setId(3);
+        cornflower.setId(2L);
+        dandelion.setId(3L);
 
         bouquet.setId(95L);
         bouquet.addFlower(rose);

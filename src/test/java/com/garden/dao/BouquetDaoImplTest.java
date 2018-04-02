@@ -56,7 +56,7 @@ public class BouquetDaoImplTest {
         // Given
         //
         rose = new Rose("rose", 60, Fresh.HIGH, 200.00, 20, true, Color.RED);
-        rose.setId(1);
+        rose.setId(1L);
         bouquet = new Bouquet("Test bouquet");
         bouquet.addFlower(rose);
 

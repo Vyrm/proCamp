@@ -3,8 +3,8 @@ package com.garden.dao.impl;
 import com.garden.dao.BouquetDao;
 import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Flower;
-import com.garden.utils.mapRower.BouquetRower;
-import com.garden.utils.mapRower.FlowerRower;
+import com.garden.utils.mapRower.BouquetRowMapper;
+import com.garden.utils.mapRower.FlowerRowMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,9 @@ public class BouquetDaoImpl implements BouquetDao {
     @Autowired
     private FlowerDaoImpl flowerDao;
     @Autowired
-    private BouquetRower bouquetRower;
+    private BouquetRowMapper bouquetRowMapper;
     @Autowired
-    private FlowerRower flowerRower;
+    private FlowerRowMapper flowerRowMapper;
     @Resource
     private Environment environment;
 
@@ -73,7 +73,7 @@ public class BouquetDaoImpl implements BouquetDao {
             psSelectBouquet.setLong(1, id);
             try (ResultSet resultSet = psSelectBouquet.executeQuery()) {
                 if (resultSet.next()) {
-                    bouquet = bouquetRower.mapRow(resultSet);
+                    bouquet = bouquetRowMapper.mapRow(resultSet);
                 }
                 logger.debug("Executed bouquet");
             }
@@ -82,7 +82,7 @@ public class BouquetDaoImpl implements BouquetDao {
                 psGetFlowers.setLong(1, id);
                 try (ResultSet resultSet = psGetFlowers.executeQuery()) {
                     while (resultSet.next()) {
-                        Flower flower = flowerRower.mapRow(resultSet);
+                        Flower flower = flowerRowMapper.mapRow(resultSet);
                         logger.info(flower.toString());
                         bouquet.getFlowers().add(flower);
                         logger.info(bouquet.toString());

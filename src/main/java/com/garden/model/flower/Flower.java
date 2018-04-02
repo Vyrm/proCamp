@@ -3,19 +3,24 @@ package com.garden.model.flower;
 import com.garden.model.settings.Color;
 import com.garden.model.settings.Fresh;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Comparator;
 
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Flower implements Comparable<Flower>, Comparator<Flower> {
     Long id;
     String name;
     int length;
-    Enum fresh;
+    Fresh fresh;
     double price;
     int petals;
     boolean spike;
-    Enum color;
+    Color color;
 
-    public Flower(String name, int length, Enum fresh, double price, int petals, boolean spike, Enum color) {
+    public Flower(String name, int length, Fresh fresh, double price, int petals, boolean spike, Color color) {
         this.name = name;
         this.length = length;
         this.fresh = fresh;
@@ -88,7 +93,7 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
