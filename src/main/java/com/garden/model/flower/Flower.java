@@ -2,11 +2,7 @@ package com.garden.model.flower;
 
 import com.garden.model.settings.Color;
 import com.garden.model.settings.Fresh;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.Comparator;
 
 public class Flower implements Comparable<Flower>, Comparator<Flower> {

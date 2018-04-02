@@ -1,10 +1,6 @@
 package com.garden.utils.mapRower;
 
 import com.garden.model.flower.Flower;
-import com.garden.model.settings.Color;
-import com.garden.model.settings.Fresh;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;

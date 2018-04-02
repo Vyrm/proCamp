@@ -1,8 +1,6 @@
 package com.garden.model.bouquet;
 
 import com.garden.model.flower.Flower;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
