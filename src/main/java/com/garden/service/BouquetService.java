@@ -93,7 +93,7 @@ public class BouquetService {
                 XMLStreamReader xmlStreamReader = new MappedXMLStreamReader(jsonObject, con);
                 Unmarshaller unmarshaller = jc.createUnmarshaller();
                 bouquet = (Bouquet) unmarshaller.unmarshal(xmlStreamReader);
-                System.out.println(bouquet);
+                logger.info(bouquet.toString());
             }
         } catch (JSONException | XMLStreamException | JAXBException | IOException e) {
             logger.error("Failed to load bouquet");
