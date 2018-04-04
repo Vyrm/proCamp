@@ -76,10 +76,13 @@ public class BouquetService {
     }
 
     public Bouquet loadBouquetFromFileToDb() {
-        JAXBContext jc;
         Bouquet bouquet = null;
+        JAXBContext jc;
         String json;
         JSONObject jsonObject;
+        Configuration config = new Configuration();
+        MappedNamespaceConvention con = new MappedNamespaceConvention(config);
+
         try (BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(new FileInputStream(env.getProperty("FILE_DIRECTORY"))))) {
             jc = JAXBContext.newInstance(Bouquet.class);
@@ -87,15 +90,12 @@ public class BouquetService {
             while ((json = bufferedReader.readLine()) != null) {
                 System.out.println(json);
                 jsonObject = new JSONObject(json);
-                Configuration config = new Configuration();
-                MappedNamespaceConvention con = new MappedNamespaceConvention(config);
                 XMLStreamReader xmlStreamReader = new MappedXMLStreamReader(jsonObject, con);
                 Unmarshaller unmarshaller = jc.createUnmarshaller();
                 bouquet = (Bouquet) unmarshaller.unmarshal(xmlStreamReader);
                 System.out.println(bouquet);
             }
-        } catch (Throwable t) {
-            t.getMessage();
+        } catch (JSONException | XMLStreamException | JAXBException | IOException e) {
             logger.error("Failed to load bouquet");
         }
         return bouquet;
