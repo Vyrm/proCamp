@@ -50,6 +50,7 @@ public class Main {
         bouquetService.sortBouquet(bouquet1);
         System.out.println("Sorted " + bouquet1);*/
 
-        bouquetService.saveBouquetToFileFromDbById(bouquet);
+        //bouquetService.saveBouquetToFileFromDbById(101L);
+        bouquetService.loadBouquetFromFileToDb();
     }
 }
