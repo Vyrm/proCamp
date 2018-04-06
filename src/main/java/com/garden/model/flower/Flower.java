@@ -6,11 +6,10 @@ import com.garden.model.settings.Fresh;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.Comparator;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Flower implements Comparable<Flower>, Comparator<Flower> {
+public class Flower {
     Long id;
     String name;
     int length;
@@ -49,7 +48,7 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
         this.price = price;
     }
 
-    public Enum getFresh() {
+    public Fresh getFresh() {
         return fresh;
     }
 
@@ -57,7 +56,7 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
         this.fresh = Fresh.valueOf(fresh);
     }
 
-    public Enum getColor() {
+    public Color getColor() {
         return color;
     }
 
@@ -97,15 +96,6 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
         this.id = id;
     }
 
-    public int compareTo(Flower o) {
-        return o.getFresh().ordinal() - this.getFresh().ordinal();
-    }
-
-    @Override
-    public int compare(Flower o1, Flower o2) {
-        return o1.getFresh().ordinal() - o2.getFresh().ordinal();
-    }
-
     @Override
     public String toString() {
         return "Flower{" +
@@ -119,6 +109,4 @@ public class Flower implements Comparable<Flower>, Comparator<Flower> {
                 ", color=" + color +
                 '}';
     }
-
-
 }

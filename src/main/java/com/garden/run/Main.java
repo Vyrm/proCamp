@@ -38,19 +38,18 @@ public class Main {
         bouquet.addFlower(dandelion);
         bouquetDao.addBouquet(bouquet);
 
-/*        System.err.println(bouquet.getPrice());
-        System.out.println(bouquet);
-        List list = bouquetService.getByLength(95L, 80, 90);
-        System.err.println("Get by length:" + list);
+/*        //Length
+        System.err.println(bouquet.getPrice());
+        System.err.println("Get by length:" + bouquetService.getByLength(95L, 80, 90));
 
-        bouquet.sortByFresh();
-        System.err.println(bouquet);
+        //Sorting
         Bouquet bouquet1 = bouquetDao.getBouquetById(126L);
-        System.err.println(bouquet1);
-        bouquetService.sortBouquet(bouquet1);
-        System.out.println("Sorted " + bouquet1);*/
+        List sortedList = bouquetService.sortBouquet(bouquet1.getFlowers());
+        Bouquet sortedBouquet = new Bouquet(sortedList);
+        System.err.println("Sorted " + sortedBouquet);
 
+        //Json import-export
         bouquetService.saveBouquetToFileFromDbById(101L);
-        bouquetService.loadBouquetFromFileToDb();
+        bouquetService.loadBouquetFromFileToDb();*/
     }
 }

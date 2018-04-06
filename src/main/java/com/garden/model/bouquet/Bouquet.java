@@ -1,19 +1,18 @@
 package com.garden.model.bouquet;
 
 import com.garden.model.flower.Flower;
+import org.springframework.lang.NonNull;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Bouquet {
     private Long id;
-    private List<Flower> flowers;
+    private List<Flower> flowers = new ArrayList<>();
     private String name;
     private double price;
 
@@ -23,7 +22,12 @@ public class Bouquet {
     }
 
     public Bouquet() {
-        flowers = new ArrayList<>();
+
+    }
+
+    public Bouquet(@NonNull Collection<Flower> flowers) {
+        if (Objects.nonNull(flowers))
+            this.flowers.addAll(flowers);
     }
 
     public void setId(Long id) {
@@ -32,14 +36,10 @@ public class Bouquet {
 
     public void addFlower(Flower flower) {
         flowers.add(flower);
-
+        updatePrice();
     }
 
     public double getPrice() {
-        double price = 0;
-        for (Flower flower : flowers) {
-            price += flower.getPrice();
-        }
         return price;
     }
 
@@ -56,12 +56,11 @@ public class Bouquet {
     }
 
     public List<Flower> getFlowers() {
-        return flowers;
+        return Collections.unmodifiableList(flowers);
     }
 
-    public void sortByFresh() {
-        List<Flower> list = this.flowers;
-        Collections.sort(list, new Flower());
+    private void updatePrice() {
+        price = flowers.stream().mapToDouble(Flower::getPrice).sum();
     }
 
     @Override
@@ -71,6 +70,4 @@ public class Bouquet {
                 ", name='" + name + '\'' +
                 '}';
     }
-
-
 }

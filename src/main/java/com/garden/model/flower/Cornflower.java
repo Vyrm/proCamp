@@ -8,19 +8,6 @@ public class Cornflower extends Flower {
         super(name, length, fresh, price, petals, spike, color);
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public Enum getFresh() {
-        return fresh;
-    }
-
-
-    public double getPrice() {
-        return price;
-    }
-
     @Override
     public String toString() {
         return "Cornflower{" +

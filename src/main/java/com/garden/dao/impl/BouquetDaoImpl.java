@@ -84,7 +84,7 @@ public class BouquetDaoImpl implements BouquetDao {
                     while (resultSet.next()) {
                         Flower flower = flowerRowMapper.mapRow(resultSet);
                         logger.info(flower.toString());
-                        bouquet.getFlowers().add(flower);
+                        bouquet.addFlower(flower);
                         logger.info(bouquet.toString());
                     }
                     logger.debug("Executed flowers");
