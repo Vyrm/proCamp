@@ -6,11 +6,12 @@ import com.garden.model.settings.Fresh;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.Objects;
 
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
 public class Flower {
-    Long id;
+    protected Long id;
     String name;
     int length;
     Fresh fresh;
@@ -108,5 +109,25 @@ public class Flower {
                 ", spike=" + spike +
                 ", color=" + color +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Flower flower = (Flower) o;
+        return length == flower.length &&
+                Double.compare(flower.price, price) == 0 &&
+                petals == flower.petals &&
+                spike == flower.spike &&
+                Objects.equals(id, flower.id) &&
+                Objects.equals(name, flower.name) &&
+                fresh == flower.fresh &&
+                color == flower.color;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, length, fresh, price, petals, spike, color);
     }
 }

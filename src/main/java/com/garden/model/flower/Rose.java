@@ -8,6 +8,11 @@ public class Rose extends Flower {
         super(name, length, fresh, price, petals, spike, color);
     }
 
+
+    public Rose(final Flower flower) {
+        this(flower.name, flower.length, flower.fresh, flower.price, flower.petals, flower.spike, flower.color);
+    }
+
     @Override
     public String toString() {
         return "Rose{" +
