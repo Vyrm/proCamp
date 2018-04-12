@@ -26,4 +26,5 @@ public class Rose extends Flower {
                 ", color=" + color +
                 '}';
     }
+
 }

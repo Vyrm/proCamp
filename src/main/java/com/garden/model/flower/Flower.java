@@ -114,7 +114,7 @@ public class Flower {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (o == null) return false;
         Flower flower = (Flower) o;
         return length == flower.length &&
                 Double.compare(flower.price, price) == 0 &&
@@ -128,6 +128,7 @@ public class Flower {
 
     @Override
     public int hashCode() {
+
         return Objects.hash(id, name, length, fresh, price, petals, spike, color);
     }
 }

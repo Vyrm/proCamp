@@ -22,8 +22,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -95,12 +95,7 @@ public class JsonDaoImplTest {
 
     @Test
     public void importTest() throws IOException {
-        List<Flower> flowers = null;
-        String name = null;
-        double price = 0;
-        Long id = 0L;
         Collection<Bouquet> actual;
-        Rose expectedRose;
 
         //
         // Given
@@ -113,28 +108,17 @@ public class JsonDaoImplTest {
         //
         jsonDao.exportToJson(bouquet);
         actual = jsonDao.importFromJson();
-
-        for (Bouquet bouquet1 : actual) {
-            id = bouquet1.getId();
-            flowers = bouquet1.getFlowers();
-            name = bouquet1.getName();
-            price = bouquet1.getPrice();
-        }
-        expectedRose = new Rose(flowers.get(0));
-        expectedRose.setId(200L);
+        ArrayList<Bouquet> bouquets = new ArrayList<>(actual);
 
         //
         // Then
         //
-        Assert.assertEquals(expectedRose, rose);
-        Assert.assertEquals(name, bouquet.getName());
-        Assert.assertEquals(price, bouquet.getPrice(), 0.0);
-        Assert.assertEquals(id, bouquet.getId());
+        Assert.assertEquals(bouquet, bouquets.get(0));
     }
 
     @After
     public void destroy() {
-        System.out.println(file.delete());
+        file.delete();
     }
 
     private String readJson() {

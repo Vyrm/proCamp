@@ -74,4 +74,20 @@ public class Bouquet {
     public Long getId() {
         return id;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Bouquet bouquet = (Bouquet) o;
+        return Double.compare(bouquet.price, price) == 0 &&
+                Objects.equals(id, bouquet.id) &&
+                Objects.equals(flowers, bouquet.flowers) &&
+                Objects.equals(name, bouquet.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, flowers, name, price);
+    }
 }
