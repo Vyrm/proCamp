@@ -1,1 +1,0 @@
-{"bouquet":{"id":100,"flowers":{"id":200,"name":"Rose","length":70,"fresh":"high","price":300,"petals":20,"spike":true,"color":"red"},"name":"TestBouquet","price":300}}{"bouquet":{"id":100,"flowers":{"id":200,"name":"Rose","length":70,"fresh":"high","price":300,"petals":20,"spike":true,"color":"red"},"name":"TestBouquet","price":300}}

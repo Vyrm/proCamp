@@ -38,15 +38,14 @@ public class JsonDaoImplTest {
     private Environment env;
     @InjectMocks
     private JsonDaoImpl jsonDao;
-    private File file = new File("test.txt");
-    ;
+    private File file;
 
     @Before
     public void init() {
-
         //
         // Given
         //
+        file = new File("test.txt");
         json = "{\"bouquet\":{\"id\":100,\"flowers\":{\"id\":200,\"name\":\"Rose\",\"length\":70,\"fresh\":\"high\"," +
                 "\"price\":300,\"petals\":20,\"spike\":true,\"color\":\"red\"},\"name\":\"TestBouquet\",\"price\":300}}";
         rose = new Rose("Rose", 70, Fresh.HIGH, 300.00, 20, true, Color.RED);
@@ -72,6 +71,8 @@ public class JsonDaoImplTest {
 
     @Test
     public void assertStringsTest() throws IOException {
+        String actual;
+
         //
         // Given
         //
@@ -81,10 +82,7 @@ public class JsonDaoImplTest {
         // When
         //
         jsonDao.exportToJson(bouquet);
-        BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(
-                        new FileInputStream(file)));
-        String actual = bufferedReader.readLine();
+        actual = readJson();
 
         //
         // Then
@@ -94,6 +92,13 @@ public class JsonDaoImplTest {
 
     @Test
     public void importTest() throws IOException {
+        List<Flower> flowers = null;
+        String name = null;
+        double price = 0;
+        Long id = 0L;
+        Collection<Bouquet> actual;
+        Rose expectedRose;
+
         //
         // Given
         //
@@ -104,18 +109,15 @@ public class JsonDaoImplTest {
         // When
         //
         jsonDao.exportToJson(bouquet);
-        Collection<Bouquet> actual = jsonDao.importFromJson();
-        List<Flower> flowers = null;
-        String name = null;
-        double price = 0;
-        Long id = 0L;
+        actual = jsonDao.importFromJson();
+
         for (Bouquet bouquet1 : actual) {
             id = bouquet1.getId();
             flowers = bouquet1.getFlowers();
             name = bouquet1.getName();
             price = bouquet1.getPrice();
         }
-        Rose expectedRose = new Rose(flowers.get(0));
+        expectedRose = new Rose(flowers.get(0));
         expectedRose.setId(200L);
 
         //
@@ -130,5 +132,14 @@ public class JsonDaoImplTest {
     @After
     public void destroy() {
         System.out.println(file.delete());
+    }
+
+    private String readJson() throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(
+                        new FileInputStream(file)));
+        String json = bufferedReader.readLine();
+        bufferedReader.close();
+        return json;
     }
 }
