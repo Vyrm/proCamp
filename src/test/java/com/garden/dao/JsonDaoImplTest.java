@@ -15,6 +15,8 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
@@ -29,6 +31,7 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 @ContextConfiguration(classes = AppConfig.class, loader = AnnotationConfigContextLoader.class)
 public class JsonDaoImplTest {
+    private final Logger logger = LoggerFactory.getLogger("JsonDaoImplTest");
     private Rose rose;
     private Bouquet bouquet;
     private String json;
@@ -70,7 +73,7 @@ public class JsonDaoImplTest {
     }
 
     @Test
-    public void assertStringsTest() throws IOException {
+    public void assertStringsTest() {
         String actual;
 
         //
@@ -134,12 +137,15 @@ public class JsonDaoImplTest {
         System.out.println(file.delete());
     }
 
-    private String readJson() throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(
+    private String readJson() {
+        String json = null;
+        try(BufferedReader bufferedReader = new BufferedReader(
                 new InputStreamReader(
-                        new FileInputStream(file)));
-        String json = bufferedReader.readLine();
-        bufferedReader.close();
+                        new FileInputStream(file)))){
+            json = bufferedReader.readLine();
+        } catch (IOException e) {
+            logger.error("Failed to read Json");
+        }
         return json;
     }
 }
