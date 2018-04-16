@@ -1,7 +1,7 @@
 package com.garden.service;
 
-import com.garden.dao.JsonDao;
 import com.garden.dao.impl.BouquetDaoImpl;
+import com.garden.dao.impl.JsonDaoImpl;
 import com.garden.model.bouquet.Bouquet;
 import com.garden.model.flower.Flower;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ public class BouquetService {
     @Autowired
     private BouquetDaoImpl bouquetDao;
     @Autowired
-    private JsonDao jsonDao;
+    private JsonDaoImpl jsonDao;
     @Resource
     private Environment env;
 
@@ -52,10 +52,26 @@ public class BouquetService {
         } catch (SQLException e) {
             logger.error("Failed to get bouquet");
         }
-        return jsonDao.exportToJson(bouquet);
+        return jsonDao.exportJsonToFile(bouquet);
     }
 
     public Collection<Bouquet> loadBouquetFromFileToDb() {
         return jsonDao.importFromJson();
+    }
+
+    public String getJsonString(Long bouquetId) {
+        Bouquet bouquet = null;
+        String json = null;
+        try {
+            bouquet = bouquetDao.getBouquetById(bouquetId);
+        } catch (SQLException e) {
+            logger.error("Failed to get bouquet by id");
+        }
+        try {
+            json = jsonDao.getJson(bouquet);
+        } catch (Exception e) {
+            logger.error("failed to get String");
+        }
+        return json;
     }
 }

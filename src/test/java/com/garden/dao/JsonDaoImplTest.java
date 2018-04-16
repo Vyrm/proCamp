@@ -3,7 +3,6 @@ package com.garden.dao;
 import com.garden.config.AppConfig;
 import com.garden.dao.impl.JsonDaoImpl;
 import com.garden.model.bouquet.Bouquet;
-import com.garden.model.flower.Flower;
 import com.garden.model.flower.Rose;
 import com.garden.model.settings.Color;
 import com.garden.model.settings.Fresh;
@@ -23,7 +22,6 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
@@ -69,7 +67,7 @@ public class JsonDaoImplTest {
         //
         // Then
         //
-        Assert.assertEquals(jsonDao.exportToJson(bouquet), true);
+        Assert.assertEquals(jsonDao.exportJsonToFile(bouquet), true);
     }
 
     @Test
@@ -84,7 +82,7 @@ public class JsonDaoImplTest {
         //
         // When
         //
-        jsonDao.exportToJson(bouquet);
+        jsonDao.exportJsonToFile(bouquet);
         actual = readJson();
 
         //
@@ -106,7 +104,7 @@ public class JsonDaoImplTest {
         //
         // When
         //
-        jsonDao.exportToJson(bouquet);
+        jsonDao.exportJsonToFile(bouquet);
         actual = jsonDao.importFromJson();
         ArrayList<Bouquet> bouquets = new ArrayList<>(actual);
 

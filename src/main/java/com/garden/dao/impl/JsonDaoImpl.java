@@ -33,7 +33,7 @@ public class JsonDaoImpl implements JsonDao {
 
 
     @Override
-    public boolean exportToJson(Bouquet bouquet) {
+    public boolean exportJsonToFile(Bouquet bouquet) {
         boolean result;
         XMLStreamWriter xmlStreamWriter;
         Configuration config = new Configuration();
@@ -49,6 +49,7 @@ public class JsonDaoImpl implements JsonDao {
             result = false;
             logger.error("Failed to marshal to Json");
         }
+
         return result;
     }
 
@@ -80,5 +81,26 @@ public class JsonDaoImpl implements JsonDao {
             logger.error("Failed to load bouquet");
         }
         return collection;
+    }
+
+    @Override
+    public String getJson(Bouquet bouquet) {
+        String json = null;
+        XMLStreamWriter xmlStreamWriter;
+        Configuration config = new Configuration();
+        MappedNamespaceConvention con = new MappedNamespaceConvention(config);
+        try (Writer writer = new StringWriter()) {
+            JAXBContext jc = JAXBContext.newInstance(Bouquet.class);
+            xmlStreamWriter = new MappedXMLStreamWriter(con, writer);
+            Marshaller marshaller = jc.createMarshaller();
+            marshaller.marshal(bouquet, xmlStreamWriter);
+            json = writer.toString();
+            logger.info("Success export object to file");
+        } catch (IOException | JAXBException e) {
+
+            logger.error("Failed to marshal to Json");
+        }
+
+        return json;
     }
 }

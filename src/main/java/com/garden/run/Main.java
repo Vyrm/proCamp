@@ -20,7 +20,7 @@ import javax.xml.stream.XMLStreamException;
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) throws SQLException, JAXBException, JSONException, XMLStreamException {
+    public static void main(String[] args) throws SQLException {
         ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
         BouquetDaoImpl bouquetDao = context.getBean(BouquetDaoImpl.class);
@@ -32,10 +32,12 @@ public class Main {
         Flower cornflower = new Cornflower("Cornflower", 80, Fresh.LOW, 200.00, 20, true, Color.RED);
         Flower dandelion = new Dandelion("Dandelion", 90, Fresh.HIGH, 100.00, 10, false, Color.BLUE);
 
-        Bouquet bouquet = new Bouquet("Bouquet 1");
+        Bouquet bouquet = new Bouquet("Bouquet 2");
         bouquet.addFlower(rose);
         bouquet.addFlower(cornflower);
         bouquet.addFlower(dandelion);
+        bouquetDao.addBouquet(bouquet);
+
         bouquetDao.addBouquet(bouquet);
 
 /*        //Length
@@ -51,5 +53,7 @@ public class Main {
         //Json import-export
         bouquetService.saveBouquetToFileFromDbById(101L);
         bouquetService.loadBouquetFromFileToDb();*/
+        //bouquetService.getJsonString(101L);
+
     }
 }
