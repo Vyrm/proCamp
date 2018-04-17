@@ -42,6 +42,6 @@
 
 </script>
 
-<a href=main.jsp>Back</a>
+<a href=/>Back</a>
 </body>
 </html>
